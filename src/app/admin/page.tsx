@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import ReorderableBlocks from '@/components/admin/ReorderableBlocks';
+import { ActionForm } from '@/components/admin/ActionForm';
 
 import { getSession } from '@/lib/auth';
 import { redirect } from 'next/navigation';
@@ -33,11 +34,11 @@ export default async function AdminDashboard() {
             <Link href={`/${profile.username}`} target="_blank" className="text-blue-600 font-semibold hover:underline">
               View Live Profile &rarr;
             </Link>
-            <form action={logout}>
+            <ActionForm action={logout}>
               <button type="submit" className="text-sm font-semibold text-gray-600 hover:text-gray-900">
                 Log Out
               </button>
-            </form>
+            </ActionForm>
           </div>
         </header>
 
@@ -46,7 +47,7 @@ export default async function AdminDashboard() {
           
           <section className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <h2 className="text-xl font-bold mb-4">Profile Settings</h2>
-            <form action={updateProfile} className="flex flex-col gap-4">
+            <ActionForm action={updateProfile} className="flex flex-col gap-4" successMessage="Profile updated!">
               <div className="flex items-center gap-4 mb-2">
                 {profile.avatar && (
                   <img src={profile.avatar} alt="Avatar" className="w-16 h-16 rounded-full object-cover" />
@@ -68,7 +69,7 @@ export default async function AdminDashboard() {
               <button type="submit" className="w-full bg-blue-600 text-white font-semibold py-2 rounded-md hover:bg-blue-700 transition-colors">
                 Save Profile
               </button>
-            </form>
+            </ActionForm>
           </section>
 
           <section className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
@@ -82,19 +83,19 @@ export default async function AdminDashboard() {
                     <span className="font-semibold capitalize">{link.platform}</span>
                     <span className="text-xs text-gray-500 truncate max-w-[200px]">{link.url}</span>
                   </div>
-                  <form action={async () => {
+                  <ActionForm action={async () => {
                     'use server';
                     await deleteSocialLink(link.id);
-                  }}>
+                  }} successMessage="Link deleted">
                     <button type="submit" className="p-2 text-red-500 hover:bg-red-50 rounded-md transition-colors" title="Delete Social Link">
                       <Trash2 size={18} />
                     </button>
-                  </form>
+                  </ActionForm>
                 </div>
               ))}
             </div>
 
-            <form action={addSocialLink} className="flex flex-col gap-3 pt-4 border-t">
+            <ActionForm action={addSocialLink} className="flex flex-col gap-3 pt-4 border-t" successMessage="Link added!">
               <h3 className="font-semibold text-sm">Add New Social Link</h3>
               <div>
                 <select name="platform" className="w-full border rounded-md p-2 outline-none mb-3">
@@ -110,7 +111,7 @@ export default async function AdminDashboard() {
               <button type="submit" className="w-full bg-gray-900 text-white font-semibold py-2 rounded-md hover:bg-gray-800 transition-colors">
                 Add Icon
               </button>
-            </form>
+            </ActionForm>
           </section>
 
         </div>
@@ -118,7 +119,7 @@ export default async function AdminDashboard() {
         {/* MIDDLE ROW: Appearance */}
         <section className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
           <h2 className="text-xl font-bold mb-4">Theme & Appearance</h2>
-          <form action={updateTheme} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+          <ActionForm action={updateTheme} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end" successMessage="Theme applied!">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Background Color</label>
               <input type="color" name="backgroundColor" defaultValue={profile.themeConfig ? JSON.parse(profile.themeConfig).backgroundColor : '#f9fafb'} className="w-full h-10 rounded cursor-pointer" />
@@ -144,7 +145,7 @@ export default async function AdminDashboard() {
                 Apply Theme
               </button>
             </div>
-          </form>
+          </ActionForm>
         </section>
 
         {/* BOTTOM ROW: Block Links */}
@@ -158,7 +159,7 @@ export default async function AdminDashboard() {
           <div className="flex flex-col gap-8">
             <section className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
               <h2 className="text-xl font-bold mb-4">Add Standard Link</h2>
-              <form action={addStandardLink} className="flex flex-col gap-4">
+              <ActionForm action={addStandardLink} className="flex flex-col gap-4" successMessage="Link added!">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
                   <input type="text" name="title" required placeholder="My Awesome Project" className="w-full border rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
@@ -178,12 +179,12 @@ export default async function AdminDashboard() {
                 <button type="submit" className="w-full bg-blue-600 text-white font-semibold py-2 rounded-md hover:bg-blue-700 transition-colors">
                   Add Link
                 </button>
-              </form>
+              </ActionForm>
             </section>
 
             <section className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
               <h2 className="text-xl font-bold mb-4">Add YouTube / Spotify Embed</h2>
-              <form action={addEmbedBlock} className="flex flex-col gap-4">
+              <ActionForm action={addEmbedBlock} className="flex flex-col gap-4" successMessage="Embed added!">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Video / Track URL</label>
                   <input type="url" name="url" required placeholder="https://youtube.com/watch?v=..." className="w-full border rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
@@ -198,7 +199,7 @@ export default async function AdminDashboard() {
                 <button type="submit" className="w-full bg-red-600 text-white font-semibold py-2 rounded-md hover:bg-red-700 transition-colors">
                   Add Embed
                 </button>
-              </form>
+              </ActionForm>
             </section>
           </div>
         </div>
