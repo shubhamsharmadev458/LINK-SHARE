@@ -14,13 +14,25 @@ export function ActionForm({ action, successMessage = 'Success!', children, clas
       className={className}
       {...props}
       action={async (formData) => {
-        const promise = action(formData);
+        let redirectError: any = null;
+
+        const promise = action(formData).catch((err) => {
+          if (err?.message === 'NEXT_REDIRECT' || err?.digest?.startsWith('NEXT_REDIRECT')) {
+            redirectError = err;
+            return; // Resolve the promise so toast shows success
+          }
+          throw err;
+        });
         
-        toast.promise(promise, {
+        await toast.promise(promise, {
           loading: 'Saving...',
           success: successMessage,
           error: (err) => err.message || 'Something went wrong',
         });
+
+        if (redirectError) {
+          throw redirectError;
+        }
       }}
     >
       {children}
