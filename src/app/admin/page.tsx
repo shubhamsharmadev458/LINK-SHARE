@@ -5,6 +5,7 @@ import { Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import ReorderableBlocks from '@/components/admin/ReorderableBlocks';
 import { ActionForm } from '@/components/admin/ActionForm';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 import { getSession } from '@/lib/auth';
 import { redirect } from 'next/navigation';
@@ -25,17 +26,18 @@ export default async function AdminDashboard() {
   if (!profile) return <div className="p-8">Admin Error: Profile not found for this user.</div>;
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 p-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 p-8 transition-colors">
       <div className="max-w-5xl mx-auto flex flex-col gap-8">
         
         <header className="flex items-center justify-between">
           <h1 className="text-3xl font-bold">Admin Dashboard</h1>
           <div className="flex items-center gap-4">
-            <Link href={`/${profile.username}`} target="_blank" className="text-blue-600 font-semibold hover:underline">
+            <Link href={`/${profile.username}`} target="_blank" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
               View Live Profile &rarr;
             </Link>
+            <ThemeToggle />
             <ActionForm action={logout}>
-              <button type="submit" className="text-sm font-semibold text-gray-600 hover:text-gray-900">
+              <button type="submit" className="text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
                 Log Out
               </button>
             </ActionForm>
@@ -45,7 +47,7 @@ export default async function AdminDashboard() {
         {/* TOP ROW: Profile & Socials */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           
-          <section className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <section className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
             <h2 className="text-xl font-bold mb-4">Profile Settings</h2>
             <ActionForm action={updateProfile} className="flex flex-col gap-4" successMessage="Profile updated!">
               <div className="flex items-center gap-4 mb-2">
@@ -53,18 +55,18 @@ export default async function AdminDashboard() {
                   <img src={profile.avatar} alt="Avatar" className="w-16 h-16 rounded-full object-cover" />
                 )}
                 <div className="flex-1">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">New Avatar Image (Optional)</label>
-                  <input type="file" name="avatarFile" accept="image/*" className="w-full border rounded-md p-1.5 focus:ring-2 focus:ring-blue-500 outline-none text-sm" />
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">New Avatar Image (Optional)</label>
+                  <input type="file" name="avatarFile" accept="image/*" className="w-full border dark:border-gray-700 dark:bg-gray-800 rounded-md p-1.5 focus:ring-2 focus:ring-blue-500 outline-none text-sm" />
                 </div>
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Display Name</label>
-                <input type="text" name="displayName" defaultValue={profile.displayName || ''} placeholder="Your Name" className="w-full border rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Display Name</label>
+                <input type="text" name="displayName" defaultValue={profile.displayName || ''} placeholder="Your Name" className="w-full border dark:border-gray-700 dark:bg-gray-800 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Bio</label>
-                <textarea name="bio" rows={3} defaultValue={profile.bio || ''} placeholder="A short bio about yourself..." className="w-full border rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bio</label>
+                <textarea name="bio" rows={3} defaultValue={profile.bio || ''} placeholder="A short bio about yourself..." className="w-full border dark:border-gray-700 dark:bg-gray-800 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
               </div>
               <button type="submit" className="w-full bg-blue-600 text-white font-semibold py-2 rounded-md hover:bg-blue-700 transition-colors">
                 Save Profile
@@ -72,16 +74,16 @@ export default async function AdminDashboard() {
             </ActionForm>
           </section>
 
-          <section className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <section className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
             <h2 className="text-xl font-bold mb-4">Social Links</h2>
             
             <div className="flex flex-col gap-3 mb-6">
               {profile.socialLinks.length === 0 && <p className="text-gray-500 text-sm">No social links yet.</p>}
               {profile.socialLinks.map(link => (
-                <div key={link.id} className="flex items-center justify-between p-3 border rounded-lg bg-gray-50">
+                <div key={link.id} className="flex items-center justify-between p-3 border dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800/50">
                   <div className="flex flex-col">
                     <span className="font-semibold capitalize">{link.platform}</span>
-                    <span className="text-xs text-gray-500 truncate max-w-[200px]">{link.url}</span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-[200px]">{link.url}</span>
                   </div>
                   <ActionForm action={async () => {
                     'use server';
@@ -95,10 +97,10 @@ export default async function AdminDashboard() {
               ))}
             </div>
 
-            <ActionForm action={addSocialLink} className="flex flex-col gap-3 pt-4 border-t" successMessage="Link added!">
+            <ActionForm action={addSocialLink} className="flex flex-col gap-3 pt-4 border-t dark:border-gray-800" successMessage="Link added!">
               <h3 className="font-semibold text-sm">Add New Social Link</h3>
               <div>
-                <select name="platform" className="w-full border rounded-md p-2 outline-none mb-3">
+                <select name="platform" className="w-full border dark:border-gray-700 dark:bg-gray-800 rounded-md p-2 outline-none mb-3">
                   <option value="twitter">Twitter</option>
                   <option value="instagram">Instagram</option>
                   <option value="github">GitHub</option>
@@ -106,9 +108,9 @@ export default async function AdminDashboard() {
                   <option value="linkedin">LinkedIn</option>
                   <option value="mail">Email</option>
                 </select>
-                <input type="url" name="url" required placeholder="https://..." className="w-full border rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+                <input type="url" name="url" required placeholder="https://..." className="w-full border dark:border-gray-700 dark:bg-gray-800 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
               </div>
-              <button type="submit" className="w-full bg-gray-900 text-white font-semibold py-2 rounded-md hover:bg-gray-800 transition-colors">
+              <button type="submit" className="w-full bg-gray-900 dark:bg-gray-100 dark:text-gray-900 text-white font-semibold py-2 rounded-md hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors">
                 Add Icon
               </button>
             </ActionForm>
@@ -117,20 +119,20 @@ export default async function AdminDashboard() {
         </div>
 
         {/* MIDDLE ROW: Appearance */}
-        <section className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <section className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
           <h2 className="text-xl font-bold mb-4">Theme & Appearance</h2>
           <ActionForm action={updateTheme} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end" successMessage="Theme applied!">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Background Color</label>
-              <input type="color" name="backgroundColor" defaultValue={profile.themeConfig ? JSON.parse(profile.themeConfig).backgroundColor : '#f9fafb'} className="w-full h-10 rounded cursor-pointer" />
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Background Color</label>
+              <input type="color" name="backgroundColor" defaultValue={profile.themeConfig ? JSON.parse(profile.themeConfig).backgroundColor : '#f9fafb'} className="w-full h-10 rounded cursor-pointer border dark:border-gray-700" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Button Color</label>
-              <input type="color" name="buttonColor" defaultValue={profile.themeConfig ? JSON.parse(profile.themeConfig).buttonColor : '#ffffff'} className="w-full h-10 rounded cursor-pointer" />
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Button Color</label>
+              <input type="color" name="buttonColor" defaultValue={profile.themeConfig ? JSON.parse(profile.themeConfig).buttonColor : '#ffffff'} className="w-full h-10 rounded cursor-pointer border dark:border-gray-700" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Font Family</label>
-              <select name="fontFamily" defaultValue={profile.themeConfig ? JSON.parse(profile.themeConfig).fontFamily : 'Inter'} className="w-full border rounded-md p-2 outline-none">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Font Family</label>
+              <select name="fontFamily" defaultValue={profile.themeConfig ? JSON.parse(profile.themeConfig).fontFamily : 'Inter'} className="w-full border dark:border-gray-700 dark:bg-gray-800 rounded-md p-2 outline-none">
                 <option value="Inter, sans-serif">Inter (Modern)</option>
                 <option value="Georgia, serif">Georgia (Serif)</option>
                 <option value="'Comic Sans MS', cursive">Comic Sans (Fun)</option>
@@ -139,7 +141,7 @@ export default async function AdminDashboard() {
             <div className="flex flex-col gap-2">
               <label className="flex items-center gap-2 cursor-pointer">
                 <input type="checkbox" name="glassmorphism" defaultChecked={profile.themeConfig ? JSON.parse(profile.themeConfig).glassmorphism : false} className="w-4 h-4 text-blue-600 rounded" />
-                <span className="text-sm font-medium text-gray-700">Glassmorphism Mode</span>
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Glassmorphism Mode</span>
               </label>
               <button type="submit" className="w-full bg-purple-600 text-white font-semibold py-2 rounded-md hover:bg-purple-700 transition-colors">
                 Apply Theme
@@ -151,30 +153,30 @@ export default async function AdminDashboard() {
         {/* BOTTOM ROW: Block Links */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           
-          <section className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <section className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
             <h2 className="text-xl font-bold mb-4">Your Link Blocks</h2>
             <ReorderableBlocks initialBlocks={profile.blocks} />
           </section>
 
           <div className="flex flex-col gap-8">
-            <section className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+            <section className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
               <h2 className="text-xl font-bold mb-4">Add Standard Link</h2>
               <ActionForm action={addStandardLink} className="flex flex-col gap-4" successMessage="Link added!">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
-                  <input type="text" name="title" required placeholder="My Awesome Project" className="w-full border rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Title</label>
+                  <input type="text" name="title" required placeholder="My Awesome Project" className="w-full border dark:border-gray-700 dark:bg-gray-800 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">URL</label>
-                  <input type="url" name="url" required placeholder="https://example.com" className="w-full border rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">URL</label>
+                  <input type="url" name="url" required placeholder="https://example.com" className="w-full border dark:border-gray-700 dark:bg-gray-800 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Upload Thumbnail Image (Optional)</label>
-                  <input type="file" name="thumbnailFile" accept="image/*" className="w-full border rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Upload Thumbnail Image (Optional)</label>
+                  <input type="file" name="thumbnailFile" accept="image/*" className="w-full border dark:border-gray-700 dark:bg-gray-800 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
                 </div>
                 <div className="text-center text-xs text-gray-400">or use an image URL</div>
                 <div>
-                  <input type="url" name="thumbnail" placeholder="https://image-url.jpg" className="w-full border rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+                  <input type="url" name="thumbnail" placeholder="https://image-url.jpg" className="w-full border dark:border-gray-700 dark:bg-gray-800 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
                 </div>
                 <button type="submit" className="w-full bg-blue-600 text-white font-semibold py-2 rounded-md hover:bg-blue-700 transition-colors">
                   Add Link
@@ -182,16 +184,16 @@ export default async function AdminDashboard() {
               </ActionForm>
             </section>
 
-            <section className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+            <section className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
               <h2 className="text-xl font-bold mb-4">Add YouTube / Spotify Embed</h2>
               <ActionForm action={addEmbedBlock} className="flex flex-col gap-4" successMessage="Embed added!">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Video / Track URL</label>
-                  <input type="url" name="url" required placeholder="https://youtube.com/watch?v=..." className="w-full border rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Video / Track URL</label>
+                  <input type="url" name="url" required placeholder="https://youtube.com/watch?v=..." className="w-full border dark:border-gray-700 dark:bg-gray-800 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Provider</label>
-                  <select name="provider" className="w-full border rounded-md p-2 outline-none">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Provider</label>
+                  <select name="provider" className="w-full border dark:border-gray-700 dark:bg-gray-800 rounded-md p-2 outline-none">
                     <option value="youtube">YouTube</option>
                     <option value="spotify">Spotify</option>
                   </select>
